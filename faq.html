@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — 가전 렌탈 자주 묻는 질문 | 렌탈핏</title>
+  <meta name="description" content="가전 렌탈 계약 전 궁금한 점을 해결하세요. 브랜드 할인, 제휴카드 할인, 결합할인, 계약기간 등 렌탈 관련 자주 묻는 질문을 모았어요." />
+  <meta name="keywords" content="가전렌탈FAQ,렌탈할인,결합할인이란,제휴카드할인,렌탈계약기간,코웨이할인,SK매직할인" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F5F3EE; --card: #FFFFFF; --primary: #1A1A2E;
+      --accent: #E63946; --accent2: #457B9D; --muted: #8A8A8A;
+      --border: #E8E5DF; --success: #2D6A4F;
+      --font: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--primary); }
+    .gnb { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .gnb-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 56px; }
+    .gnb-logo { font-size: 16px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .gnb-logo span { color: var(--accent); }
+    .gnb-menu { display: flex; align-items: center; gap: 4px; position: relative; }
+    .gnb-item { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all .15s; cursor: pointer; }
+    .gnb-item:hover, .gnb-item.active { color: var(--primary); }
+    .gnb-dropdown { position: relative; }
+    .gnb-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; min-width: 160px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .gnb-dropdown:hover .gnb-dropdown-menu { display: block; }
+    .gnb-dropdown-item { display: block; padding: 12px 16px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; transition: background .15s; border-bottom: 1px solid var(--border); }
+    .gnb-dropdown-item:last-child { border-bottom: none; }
+    .gnb-dropdown-item:hover { background: var(--bg); }
+    .gnb-dropdown-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; padding: 10px 16px 4px; text-transform: uppercase; }
+    .wrap { max-width: 480px; margin: 0 auto; padding: 32px 16px 60px; }
+    .page-header { margin-bottom: 32px; }
+    .page-eyebrow { font-size: 11px; font-weight: 700; color: var(--accent2); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+    .page-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 8px; }
+    .page-sub { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .faq-category { margin-bottom: 32px; }
+    .faq-category-title { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .faq-list { display: flex; flex-direction: column; gap: 8px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .faq-q { padding: 16px 18px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: background .15s; }
+    .faq-q:hover { background: var(--bg); }
+    .faq-q-text { flex: 1; }
+    .faq-arrow { font-size: 12px; color: var(--muted); transition: transform .2s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-a { display: none; padding: 0 18px 16px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 14px; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a strong { color: var(--primary); font-weight: 600; }
+    .cta-box { background: var(--primary); border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 40px; }
+    .cta-box-title { font-size: 18px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.3px; }
+    .cta-box-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 20px; line-height: 1.6; }
+    .btn-cta { display: inline-block; padding: 14px 28px; background: var(--accent); color: white; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+<header class="gnb">
+  <div class="gnb-inner">
+    <a href="index.html" class="gnb-logo">렌탈<span>핏</span></a>
+    <nav class="gnb-menu">
+      <div class="gnb-dropdown">
+        <span class="gnb-item">견적 비교하기 ▾</span>
+        <div class="gnb-dropdown-menu">
+          <div class="gnb-dropdown-label">제품 유형 선택</div>
+          <a href="calculator.html" class="gnb-dropdown-item">단일 제품 계산</a>
+          <a href="compare.html" class="gnb-dropdown-item">여러 제품 결합 비교</a>
+        </div>
+      </div>
+      <a href="faq.html" class="gnb-item active">FAQ</a>
+      <a href="contact.html" class="gnb-item">문의</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">FAQ</div>
+    <h1 class="page-title">자주 묻는 질문</h1>
+    <p class="page-sub">가전 렌탈 계약 전 궁금한 점을 정리했어요.</p>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-category-title">서비스 이용</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 무료로 사용할 수 있나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">네, 완전 무료예요. 회원가입도 필요 없고, 앱 설치도 필요 없어요. 브라우저에서 바로 사용할 수 있어요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 입력한 데이터는 어디에 저장되나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">모든 데이터는 사용하시는 기기의 브라우저에만 저장돼요. 서버로 전송되거나 외부에 공유되지 않아요. 단, 브라우저 데이터를 삭제하면 저장된 견적도 사라질 수 있어요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 어떤 브랜드 견적을 비교할 수 있나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">코웨이, SK매직, 쿠쿠, LG전자, 삼성전자, 청호나이스 등 모든 브랜드 견적을 입력하고 비교할 수 있어요. 브랜드 제한 없이 자유롭게 입력하시면 돼요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-category-title">할인 계산</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 브랜드 할인은 어떻게 계산되나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">브랜드 할인은 세 가지 유형으로 나뉘어요.<br><br>
+          <strong>n개월 50% 할인:</strong> 지정된 개월 수 동안 월요금의 절반만 납부해요.<br><br>
+          <strong>n개월 면제:</strong> 지정된 개월 수만큼 월요금을 내지 않아요.<br><br>
+          <strong>특정 회차 면제:</strong> 6회차, 12회차처럼 특정 달의 월요금이 면제돼요.<br><br>
+          견적서에 적힌 조건을 선택하고 개월 수를 입력하면 자동으로 계산돼요.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 제휴카드 할인은 꼭 받을 수 있나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">제휴카드 할인은 <strong>카드 발급 후 매달 일정 실적을 달성해야</strong> 적용돼요. 실적을 채우지 못한 달에는 할인이 적용되지 않아요. 계산기에서는 매달 실적을 달성한다고 가정하고 계산하니, 실제 납부금은 다를 수 있어요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 결합할인이란 무엇인가요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">정수기·공기청정기·에어컨처럼 <strong>여러 제품을 같은 브랜드에서 함께 계약할 때</strong> 추가로 받을 수 있는 할인이에요. 브랜드와 판매자 재량에 따라 할인 조건이 달라요. 저희 서비스의 '여러 제품 결합 비교' 메뉴에서 판매자에게 받은 견적을 그대로 입력해서 비교할 수 있어요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-category-title">렌탈 계약</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 렌탈 계약 기간은 보통 얼마나 되나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">일반적으로 <strong>36개월(3년)</strong>이 가장 많고, 제품에 따라 24개월, 48개월, 60개월 등 다양해요. 계약 기간이 길수록 월요금이 낮아지는 경우가 많아요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 계약 중도 해지하면 어떻게 되나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">계약 중도 해지 시 <strong>위약금이 발생할 수 있어요.</strong> 위약금 조건은 브랜드와 계약 조건에 따라 다르므로, 계약 전 반드시 담당자에게 확인해보세요. 계산기는 정상 납부 기준으로 계산돼요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span class="faq-q-text">Q. 계약 만료 후에는 어떻게 되나요?</span>
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">브랜드마다 다르지만, 일반적으로 <strong>제품 반납, 재계약, 소유권 이전</strong> 중에서 선택할 수 있어요. 계약 만료 전에 브랜드에서 안내 연락이 오는 경우가 많아요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <div class="cta-box-title">지금 바로 견적을 비교해보세요</div>
+    <div class="cta-box-sub">설치 없이, 회원가입 없이<br>브라우저에서 바로 사용할 수 있어요.</div>
+    <a href="calculator.html" class="btn-cta">견적 계산하기 →</a>
+  </div>
+</div>
+
+<script>
+function toggle(el) {
+  const item = el.closest('.faq-item');
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

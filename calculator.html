@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>단일 제품 렌탈 견적 계산기 | 렌탈핏</title>
+  <meta name="description" content="정수기·공기청정기·에어컨 등 단일 가전 렌탈 월요금과 총 납부금을 계산해보세요. 브랜드 할인, 제휴카드 할인 포함 실제 납부금 계산." />
+  <meta name="keywords" content="렌탈계산기,정수기렌탈월요금,공기청정기렌탈계산,에어컨렌탈견적,코웨이계산기,SK매직견적" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F5F3EE; --card: #FFFFFF; --primary: #1A1A2E;
+      --accent: #E63946; --accent2: #457B9D; --muted: #8A8A8A;
+      --border: #E8E5DF; --success: #2D6A4F;
+      --font: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--primary); }
+    .gnb { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .gnb-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 56px; }
+    .gnb-logo { font-size: 16px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+    .gnb-logo span { color: var(--accent); }
+    .gnb-menu { display: flex; align-items: center; gap: 4px; }
+    .gnb-item { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all .15s; cursor: pointer; }
+    .gnb-item:hover { color: var(--primary); }
+    .gnb-dropdown { position: relative; }
+    .gnb-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; min-width: 160px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .gnb-dropdown:hover .gnb-dropdown-menu { display: block; }
+    .gnb-dropdown-item { display: block; padding: 12px 16px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; transition: background .15s; border-bottom: 1px solid var(--border); }
+    .gnb-dropdown-item:last-child { border-bottom: none; }
+    .gnb-dropdown-item:hover { background: var(--bg); }
+    .gnb-dropdown-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; padding: 10px 16px 4px; text-transform: uppercase; }
+    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+    .nav { display: flex; background: var(--card); border-bottom: 1px solid var(--border); }
+    .nav-tab { flex: 1; padding: 14px 8px; text-align: center; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; letter-spacing: -0.2px; }
+    .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+    .nav-tab .tab-num { display: block; font-size: 10px; font-weight: 400; color: var(--muted); margin-bottom: 2px; }
+    .nav-tab.active .tab-num { color: var(--accent); opacity: .7; }
+    .screen { display: none; flex: 1; padding: 20px 16px 32px; animation: fadeIn .25s ease; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .screen-header { margin-bottom: 24px; }
+    .screen-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; }
+    .screen-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .section { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 12px; border: 1px solid var(--border); }
+    .section-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: var(--font); background: var(--bg); color: var(--primary); transition: border-color .2s; outline: none; -webkit-appearance: none; appearance: none; }
+    .field input:focus, .field select:focus { border-color: var(--accent2); background: #fff; }
+    .field input::placeholder { color: #C0BDB8; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .discount-toggle { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .discount-toggle span { font-size: 13px; font-weight: 600; }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: .2s; }
+    .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: .2s; }
+    .toggle input:checked + .toggle-slider { background: var(--accent2); }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+    .discount-options { display: none; }
+    .discount-options.visible { display: block; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .radio-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; transition: all .15s; }
+    .radio-item:has(input:checked) { border-color: var(--accent2); background: #F0F7FF; }
+    .radio-item input[type=radio] { accent-color: var(--accent2); }
+    .radio-item span { font-size: 13px; font-weight: 500; }
+    .sub-input { background: #F8F8F8; border-radius: 10px; padding: 12px; margin-top: 8px; }
+    .sub-input .field { margin-bottom: 8px; }
+    .sub-input .field:last-child { margin-bottom: 0; }
+    .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; font-family: var(--font); cursor: pointer; transition: transform .1s; letter-spacing: -0.3px; margin-top: 4px; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-secondary { width: 100%; padding: 14px; background: transparent; color: var(--primary); border: 1.5px solid var(--border); border-radius: 14px; font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; transition: background .15s; margin-top: 8px; }
+    .btn-accent { width: 100%; padding: 16px; background: var(--accent); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; font-family: var(--font); cursor: pointer; transition: transform .1s; margin-top: 8px; }
+    .result-hero { background: var(--primary); border-radius: 20px; padding: 28px 24px; margin-bottom: 12px; color: white; }
+    .result-hero-label { font-size: 12px; font-weight: 600; opacity: .6; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .result-hero-name { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .result-hero-amount { font-size: 40px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+    .result-hero-amount span { font-size: 16px; font-weight: 500; opacity: .7; }
+    .result-hero-sub { font-size: 13px; opacity: .6; margin-top: 6px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .result-card-label { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+    .result-card-value { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .result-card-value.accent { color: var(--accent); }
+    .result-card-value.success { color: var(--success); }
+    .result-card-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .result-breakdown { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+    .breakdown-title { font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-row .label { color: var(--muted); }
+    .breakdown-row .value { font-weight: 600; }
+    .breakdown-row .value.discount { color: var(--success); }
+    .breakdown-row.total .label { font-weight: 700; color: var(--primary); }
+    .breakdown-row.total .value { font-weight: 700; font-size: 15px; color: var(--accent); }
+    .compare-empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .compare-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .compare-empty p { font-size: 14px; line-height: 1.6; }
+    .compare-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .compare-item { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 18px; position: relative; }
+    .compare-item.best { border-color: var(--success); }
+    .compare-item-badge { position: absolute; top: -1px; right: 16px; background: var(--success); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 0 0 8px 8px; }
+    .compare-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .compare-item-name { font-size: 15px; font-weight: 700; }
+    .compare-item-monthly { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .compare-item-total { text-align: right; }
+    .compare-item-total-label { font-size: 11px; color: var(--muted); }
+    .compare-item-total-value { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: var(--accent); }
+    .compare-item-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .compare-stat { text-align: center; }
+    .compare-stat-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .compare-stat-value { font-size: 13px; font-weight: 600; }
+    .compare-item-delete { position: absolute; top: 14px; right: 14px; width: 24px; height: 24px; background: var(--bg); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: var(--muted); }
+    .savings-banner { background: #EBF5F0; border: 1px solid #A8D5BE; border-radius: 14px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+    .savings-banner-icon { font-size: 24px; }
+    .savings-banner-text { font-size: 13px; color: var(--success); font-weight: 600; line-height: 1.5; }
+    .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-right: 4px; margin-top: 6px; }
+    .tag-blue { background: #EBF3FA; color: var(--accent2); }
+    .tag-red { background: #FEF0F1; color: var(--accent); }
+    .select-wrapper { position: relative; }
+    .select-wrapper::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<header class="gnb">
+  <div class="gnb-inner">
+    <a href="index.html" class="gnb-logo">렌탈<span>핏</span></a>
+    <nav class="gnb-menu">
+      <div class="gnb-dropdown">
+        <span class="gnb-item">견적 비교하기 ▾</span>
+        <div class="gnb-dropdown-menu">
+          <div class="gnb-dropdown-label">제품 유형 선택</div>
+          <a href="calculator.html" class="gnb-dropdown-item">단일 제품 계산</a>
+          <a href="compare.html" class="gnb-dropdown-item">여러 제품 결합 비교</a>
+        </div>
+      </div>
+      <a href="faq.html" class="gnb-item">FAQ</a>
+      <a href="contact.html" class="gnb-item">문의</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="nav">
+    <div class="nav-tab active" onclick="showScreen('input')" id="tab-input">
+      <span class="tab-num">STEP 1</span>견적 입력
+    </div>
+    <div class="nav-tab" onclick="showScreen('result')" id="tab-result">
+      <span class="tab-num">STEP 2</span>결과 확인
+    </div>
+    <div class="nav-tab" onclick="showScreen('compare')" id="tab-compare">
+      <span class="tab-num">STEP 3</span>견적 비교
+    </div>
+  </nav>
+
+  <div class="screen active" id="screen-input">
+    <div class="screen-header">
+      <div class="screen-title">단일 제품<br>견적 계산하기</div>
+      <div class="screen-sub">받아온 견적서 내용을 입력해주세요</div>
+    </div>
+    <div class="section">
+      <div class="section-label">기본 정보</div>
+      <div class="field">
+        <label>브랜드명</label>
+        <input type="text" id="brand" placeholder="예) 코웨이, SK매직, 쿠쿠" />
+      </div>
+      <div class="field">
+        <label>제품명</label>
+        <input type="text" id="product" placeholder="예) 아이콘 정수기 2세대" />
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">계약 조건</div>
+      <div class="field-row">
+        <div class="field">
+          <label>월 요금</label>
+          <input type="number" id="monthly" placeholder="35000" />
+        </div>
+        <div class="field">
+          <label>계약기간 (개월)</label>
+          <input type="number" id="period" placeholder="36" />
+        </div>
+      </div>
+      <div class="field">
+        <label>납부일</label>
+        <div class="select-wrapper">
+          <select id="payday">
+            <option value="">납부일을 선택하세요</option>
+            <optgroup label="일반">
+              <option value="1">1일</option><option value="2">2일</option><option value="3">3일</option>
+              <option value="4">4일</option><option value="5">5일</option><option value="6">6일</option>
+              <option value="7">7일</option><option value="8">8일</option><option value="9">9일</option>
+              <option value="10">10일</option><option value="11">11일</option><option value="12">12일</option>
+              <option value="13">13일</option><option value="14">14일</option><option value="15">15일</option>
+              <option value="16">16일</option><option value="17">17일</option><option value="18">18일</option>
+              <option value="19">19일</option><option value="20">20일</option><option value="21">21일</option>
+              <option value="22">22일</option><option value="23">23일</option><option value="24">24일</option>
+              <option value="25">25일</option><option value="26">26일</option><option value="27">27일</option>
+              <option value="28">28일</option>
+            </optgroup>
+            <optgroup label="월말">
+              <option value="29">29일</option><option value="30">30일</option><option value="31">31일</option>
+              <option value="말일">말일 (월 마지막 날)</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">브랜드 할인</div>
+      <div class="discount-toggle">
+        <span>브랜드 할인 적용</span>
+        <label class="toggle"><input type="checkbox" id="brand-toggle" onchange="toggleDiscount('brand')"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="discount-options" id="brand-options">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="brand-type" value="half" checked onchange="updateBrandSub()"><span>n개월 50% 할인</span></label>
+          <label class="radio-item"><input type="radio" name="brand-type" value="free" onchange="updateBrandSub()"><span>n개월 월요금 면제</span></label>
+          <label class="radio-item"><input type="radio" name="brand-type" value="specific" onchange="updateBrandSub()"><span>특정 회차 면제</span></label>
+        </div>
+        <div class="sub-input" id="brand-sub">
+          <div class="field"><label>할인 적용 개월 수</label><input type="number" id="brand-months" placeholder="예) 6" /></div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">제휴카드 할인</div>
+      <div class="discount-toggle">
+        <span>제휴카드 할인 적용</span>
+        <label class="toggle"><input type="checkbox" id="card-toggle" onchange="toggleDiscount('card')"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="discount-options" id="card-options">
+        <div class="sub-input">
+          <div class="field"><label>월 할인 금액</label><input type="number" id="card-discount" placeholder="예) 5000" /></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="calculate()">계산하기 →</button>
+  </div>
+
+  <div class="screen" id="screen-result">
+    <div class="screen-header">
+      <div class="screen-title">견적 결과</div>
+      <div class="screen-sub" id="result-date"></div>
+    </div>
+    <div class="result-hero">
+      <div class="result-hero-label">실제 총 납부금</div>
+      <div class="result-hero-name" id="res-name">-</div>
+      <div class="result-hero-amount" id="res-total">-<span>원</span></div>
+      <div class="result-hero-sub" id="res-period-text">-</div>
+    </div>
+    <div class="result-grid">
+      <div class="result-card"><div class="result-card-label">총 납부 회차</div><div class="result-card-value" id="res-count">-</div><div class="result-card-sub">회</div></div>
+      <div class="result-card"><div class="result-card-label">월 실납부액</div><div class="result-card-value accent" id="res-effective">-</div><div class="result-card-sub">원 (평균)</div></div>
+      <div class="result-card"><div class="result-card-label">할인 전 총액</div><div class="result-card-value" id="res-original">-</div><div class="result-card-sub">원</div></div>
+      <div class="result-card"><div class="result-card-label">총 할인액</div><div class="result-card-value success" id="res-saved">-</div><div class="result-card-sub">원 절약</div></div>
+    </div>
+    <div class="result-breakdown">
+      <div class="breakdown-title">납부 상세 내역</div>
+      <div id="breakdown-rows"></div>
+    </div>
+    <button class="btn-accent" onclick="saveAndCompare()">비교함에 저장하기 →</button>
+    <button class="btn-secondary" onclick="showScreen('input')">다른 견적 입력하기</button>
+  </div>
+
+  <div class="screen" id="screen-compare">
+    <div class="screen-header">
+      <div class="screen-title">견적 비교</div>
+      <div class="screen-sub">저장된 견적을 비교해보세요</div>
+    </div>
+    <div id="compare-content"></div>
+  </div>
+</div>
+
+<script>
+let savedQuotes = JSON.parse(localStorage.getItem('rental_quotes') || '[]');
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'compare') renderCompare();
+}
+function toggleDiscount(type) {
+  const checked = document.getElementById(type + '-toggle').checked;
+  document.getElementById(type + '-options').classList.toggle('visible', checked);
+}
+function updateBrandSub() {
+  const type = document.querySelector('input[name="brand-type"]:checked')?.value;
+  const sub = document.getElementById('brand-sub');
+  if (type === 'specific') {
+    sub.innerHTML = '<div class="field"><label>면제 회차 (콤마로 구분)</label><input type="text" id="brand-specific" placeholder="예) 6, 12, 24" /></div>';
+  } else {
+    sub.innerHTML = '<div class="field"><label>할인 적용 개월 수</label><input type="number" id="brand-months" placeholder="예) 6" /></div>';
+  }
+}
+function calculate() {
+  const brand = document.getElementById('brand').value || '브랜드 미입력';
+  const product = document.getElementById('product').value || '제품 미입력';
+  const monthly = parseFloat(document.getElementById('monthly').value);
+  const period = parseInt(document.getElementById('period').value);
+  const payday = document.getElementById('payday').value;
+  if (!monthly || !period) { alert('월 요금과 계약기간을 입력해주세요'); return; }
+  const originalTotal = monthly * period;
+  let totalDiscount = 0, brandDiscountText = '', cardDiscountText = '';
+  if (document.getElementById('brand-toggle').checked) {
+    const type = document.querySelector('input[name="brand-type"]:checked')?.value;
+    if (type === 'half') {
+      const months = parseInt(document.getElementById('brand-months')?.value || 0);
+      const discount = monthly * 0.5 * months;
+      totalDiscount += discount;
+      brandDiscountText = months + '개월 50% 할인 (-' + fmt(discount) + '원)';
+    } else if (type === 'free') {
+      const months = parseInt(document.getElementById('brand-months')?.value || 0);
+      const discount = monthly * months;
+      totalDiscount += discount;
+      brandDiscountText = months + '개월 면제 (-' + fmt(discount) + '원)';
+    } else if (type === 'specific') {
+      const specific = document.getElementById('brand-specific')?.value || '';
+      const count = specific.split(',').filter(s => s.trim()).length;
+      const discount = monthly * count;
+      totalDiscount += discount;
+      brandDiscountText = count + '회차 면제 (-' + fmt(discount) + '원)';
+    }
+  }
+  if (document.getElementById('card-toggle').checked) {
+    const cardDiscount = parseFloat(document.getElementById('card-discount').value || 0);
+    const total = cardDiscount * period;
+    totalDiscount += total;
+    cardDiscountText = '제휴카드 월 ' + fmt(cardDiscount) + '원 × ' + period + '개월 (-' + fmt(total) + '원)';
+  }
+  const finalTotal = originalTotal - totalDiscount;
+  const effectiveMonthly = Math.round(finalTotal / period);
+  const paydayLabel = payday === '말일' ? '말일' : payday ? payday + '일' : '-';
+  document.getElementById('res-name').textContent = brand + ' ' + product;
+  document.getElementById('res-total').innerHTML = fmt(finalTotal) + '<span>원</span>';
+  document.getElementById('res-period-text').textContent = period + '개월 계약 · 납부일 매월 ' + paydayLabel;
+  document.getElementById('res-count').textContent = period;
+  document.getElementById('res-effective').textContent = fmt(effectiveMonthly);
+  document.getElementById('res-original').textContent = fmt(originalTotal);
+  document.getElementById('res-saved').textContent = fmt(totalDiscount);
+  document.getElementById('result-date').textContent = '계산일: ' + new Date().toLocaleDateString('ko-KR');
+  let rows = '<div class="breakdown-row"><span class="label">월 요금</span><span class="value">' + fmt(monthly) + '원</span></div>'
+    + '<div class="breakdown-row"><span class="label">계약기간</span><span class="value">' + period + '개월</span></div>'
+    + '<div class="breakdown-row"><span class="label">납부일</span><span class="value">매월 ' + paydayLabel + '</span></div>'
+    + '<div class="breakdown-row"><span class="label">할인 전 총액</span><span class="value">' + fmt(originalTotal) + '원</span></div>';
+  if (brandDiscountText) rows += '<div class="breakdown-row"><span class="label">브랜드 할인</span><span class="value discount">-' + (brandDiscountText.match(/\(([^)]+)\)/)?.[1] || '') + '</span></div>';
+  if (cardDiscountText) rows += '<div class="breakdown-row"><span class="label">제휴카드 할인</span><span class="value discount">-' + (cardDiscountText.match(/\(([^)]+)\)/)?.[1] || '') + '</span></div>';
+  rows += '<div class="breakdown-row total"><span class="label">최종 납부 총액</span><span class="value">' + fmt(finalTotal) + '원</span></div>';
+  document.getElementById('breakdown-rows').innerHTML = rows;
+  window._currentQuote = { brand, product, monthly, period, payday: paydayLabel, originalTotal, totalDiscount, finalTotal, effectiveMonthly, brandDiscountText, cardDiscountText, date: new Date().toLocaleDateString('ko-KR') };
+  showScreen('result');
+}
+function saveAndCompare() {
+  if (!window._currentQuote) return;
+  savedQuotes.push(Object.assign({}, window._currentQuote, { id: Date.now() }));
+  localStorage.setItem('rental_quotes', JSON.stringify(savedQuotes));
+  showScreen('compare');
+}
+function renderCompare() {
+  const el = document.getElementById('compare-content');
+  if (savedQuotes.length === 0) {
+    el.innerHTML = '<div class="compare-empty"><div class="compare-empty-icon">📋</div><p>아직 저장된 견적이 없어요.<br>견적을 계산하고 비교함에 저장해보세요.</p></div>';
+    return;
+  }
+  const best = savedQuotes.reduce(function(a, b) { return a.finalTotal < b.finalTotal ? a : b; });
+  const worst = savedQuotes.reduce(function(a, b) { return a.finalTotal > b.finalTotal ? a : b; });
+  let html = '';
+  if (savedQuotes.length > 1) {
+    html += '<div class="savings-banner"><div class="savings-banner-icon">💡</div><div class="savings-banner-text">' + best.brand + ' ' + best.product + '이<br>가장 저렴해요. ' + fmt(worst.finalTotal - best.finalTotal) + '원 절약 가능!</div></div>';
+  }
+  html += '<div class="compare-list">';
+  savedQuotes.forEach(function(q) {
+    const isBest = q.id === best.id && savedQuotes.length > 1;
+    html += '<div class="compare-item ' + (isBest ? 'best' : '') + '">'
+      + (isBest ? '<div class="compare-item-badge">✓ 최저가</div>' : '')
+      + '<div class="compare-item-delete" onclick="deleteQuote(' + q.id + ')">✕</div>'
+      + '<div class="compare-item-header"><div>'
+      + '<div class="compare-item-name">' + q.brand + ' ' + q.product + '</div>'
+      + '<div class="compare-item-monthly">월 ' + fmt(q.monthly) + '원 · ' + q.period + '개월</div>'
+      + '<div>' + (q.brandDiscountText ? '<span class="tag tag-blue">브랜드할인</span>' : '') + (q.cardDiscountText ? '<span class="tag tag-red">제휴카드</span>' : '') + '</div>'
+      + '</div><div class="compare-item-total"><div class="compare-item-total-label">총 납부금</div><div class="compare-item-total-value">' + fmt(q.finalTotal) + '</div></div></div>'
+      + '<div class="compare-item-stats">'
+      + '<div class="compare-stat"><div class="compare-stat-label">월 실납부</div><div class="compare-stat-value">' + fmt(q.effectiveMonthly) + '원</div></div>'
+      + '<div class="compare-stat"><div class="compare-stat-label">총 할인</div><div class="compare-stat-value">' + fmt(q.totalDiscount) + '원</div></div>'
+      + '<div class="compare-stat"><div class="compare-stat-label">납부일</div><div class="compare-stat-value">매월 ' + q.payday + '</div></div>'
+      + '</div></div>';
+  });
+  html += '</div><button class="btn-secondary" onclick="showScreen(\'input\')">+ 새 견적 추가하기</button>';
+  el.innerHTML = html;
+}
+function deleteQuote(id) {
+  savedQuotes = savedQuotes.filter(function(q) { return q.id !== id; });
+  localStorage.setItem('rental_quotes', JSON.stringify(savedQuotes));
+  renderCompare();
+}
+function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
+</script>
+</body>
+</html>
