@@ -90,7 +90,6 @@
   </div>
 
   <div class="form-card" id="form-section">
-    <!-- Formspree 연동 시 action="https://formspree.io/f/YOUR_FORM_ID" method="POST" 추가 -->
     <form id="contact-form" onsubmit="handleSubmit(event)">
       <div class="field">
         <label>문의 유형</label>
@@ -129,12 +128,29 @@
 </div>
 
 <script>
+var CONTACT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzOTUSbIne1nNH5ogEjK1tOr9ALuyM1lh34jWWwSFQ2DdFDLd4jGgal3niHLDpYREWS/exec';
+
 function handleSubmit(e) {
   e.preventDefault();
-  // Formspree 연동 전 임시 처리
-  // 연동 후에는 form에 action/method 추가하고 이 함수 제거
-  document.getElementById('form-section').style.display = 'none';
-  document.getElementById('success-section').style.display = 'block';
+  var form = e.target;
+  var submitBtn = form.querySelector('.btn-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '전송 중...';
+
+  fetch(CONTACT_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: new FormData(form)
+  })
+    .then(function () {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('success-section').style.display = 'block';
+    })
+    .catch(function () {
+      alert('문의 전송에 실패했어요. 잠시 후 다시 시도해주세요.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '문의 보내기 →';
+    });
 }
 </script>
 </body>
